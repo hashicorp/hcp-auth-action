@@ -1,23 +1,77 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Authenticate to HashiCorp Cloud Platform'
+author: 'HashiCorp, Inc.'
+description: |-
+  Authenticate to HashiCorp Cloud Platform from GitHub Actions via Workload
+  Identity Federation or service principal keys.
 
 # Add your action's branding here. This will appear on the GitHub Marketplace.
 branding:
-  icon: 'heart'
-  color: 'red'
+  icon: 'lock'
+  color: 'gray-dark'
 
 # Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
-    required: true
-    default: '1000'
+  workload_identity_provider:
+    required: false
+    description: |-
+      The full resource name of the Workload Identity Provider, for example:
+      "iam/project/750ccb51-5426-4935-966a-582e8ec106e2/service-principal/cicd/workload-identity-provider/github".
+      This is mutually exclusive with "client_id" and "client_secret".
+  audience:
+    required: false
+    description: |-
+      The value for the audience (aud) parameter in GitHub's generated OIDC
+      token. This value defaults to the value of "workload_identity_provider",
+      which is also the default value HCP expects for the audience parameter on
+      the token when exchanging. It should be rare for this value to be set.
+  client_id:
+    required: false
+    description: |-
+      The client ID of the service principal. This is mutually exclusive with
+      "workload_identity_provider".
+  client_secret:
+    required: false
+    description: |-
+      The client secret of the service principal. This is mutually exclusive with
+      "workload_identity_provider".
+  set_access_token:
+    required: false
+    default: false
+    description: |-
+      If true, the action will set the access token as an output. This is useful
+      for downstream steps that need to directly use the access token to
+      authenticate to HashiCorp Cloud Platform.
+  export_environment_variables:
+    required: false
+    default: true
+    description: |-
+      If true, the action will export common environment variables which are
+      consumed by HCP tooling:
+
+      - HCP_ORGANIZATION_ID
+      - HCP_PROJECT_ID
+      - HCP_CRED_FILE
+
+      If false, the action will not export any environment variables, meaning
+      future steps are unlikely to be automatically authenticated to HCP and the
+      access token must be used directly.
 
 # Define your outputs here.
 outputs:
-  time:
-    description: 'Your output description here'
+  organization_id:
+    description: |-
+      The organization ID for which the authenticated service principal belongs to.
+  project_id:
+    description: |-
+      The project ID of the authenticated service principal. If the service principal
+      is an organization level service principal, this value will be unset.
+  credentials_file_path:
+    description: |-
+      Path on the local filesystem where the generated credentials file resides.
+  access_token:
+    description: |-
+      The access token for calling HCP APIs. This is only available when
+      "set_access_token" is true.
 
 runs:
   using: node20
