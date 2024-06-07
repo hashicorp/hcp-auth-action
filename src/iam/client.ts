@@ -20,6 +20,13 @@ export interface PrincipalDetails {
 }
 
 /**
+ * CallerIdentityResponse is the response for the CallerIdentity API.
+ */
+interface CallerIdentityResponse {
+  principal: Principal
+}
+
+/**
  * Principal is the returned principal from the IAM service.
  */
 interface Principal {
@@ -72,10 +79,10 @@ export class Client {
         )
       }
 
-      const obj: Principal = JSON.parse(respBody)
-      const serviceID = obj.service?.id
-      const organizationID = obj.service?.organization_id
-      const projectID = obj.service?.project_id
+      const obj: CallerIdentityResponse = JSON.parse(respBody)
+      const serviceID = obj.principal?.service?.id
+      const organizationID = obj.principal?.service?.organization_id
+      const projectID = obj.principal?.service?.project_id
       if (!serviceID || !organizationID) {
         throw new Error(
           `Successfully called ${pth}, but the result contained unexpected values: ${respBody}`

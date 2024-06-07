@@ -24929,11 +24929,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ServicePrincipalCredsClient = exports.WorkloadIdentityFederationClient = void 0;
 const http_client_1 = __nccwpck_require__(6255);
 const fs_1 = __nccwpck_require__(7147);
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-commonjs, @typescript-eslint/no-require-imports
 const { version: appVersion } = __nccwpck_require__(4147);
 //
 // sourceChannel is the header that identifies the source of the request.
-const sourceChannel = (/* unused pure expression or super */ null && (`X-HCP-Source-Channel`));
+const sourceChannel = `X-HCP-Source-Channel`;
 // actionVersion contains the string version of the action.
 const actionVersion = `hcp-auth-action/${appVersion}`;
 /**
@@ -24968,7 +24968,7 @@ class WorkloadIdentityFederationClient {
     async getToken() {
         const pth = `https://api.cloud.hashicorp.com/2019-12-10/${this.#wipResourceName}/exchange-token`;
         const headers = {
-            sourceChannel: actionVersion
+            [sourceChannel]: actionVersion
         };
         const reqBody = {
             jwt_token: this.#githubOIDCToken
@@ -25134,11 +25134,11 @@ exports.Client = void 0;
 const http_client_1 = __nccwpck_require__(6255);
 const Auth = __importStar(__nccwpck_require__(5526));
 // TODO refactor
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-commonjs, @typescript-eslint/no-require-imports
 const { version: appVersion } = __nccwpck_require__(4147);
 //
 // sourceChannel is the header that identifies the source of the request.
-const sourceChannel = (/* unused pure expression or super */ null && (`X-HCP-Source-Channel`));
+const sourceChannel = `X-HCP-Source-Channel`;
 // actionVersion contains the string version of the action.
 const actionVersion = `hcp-auth-action/${appVersion}`;
 /**
@@ -25156,7 +25156,7 @@ class Client {
             maxRedirects: 5,
             maxRetries: 3,
             headers: {
-                sourceChannel: actionVersion
+                [sourceChannel]: actionVersion
             }
         });
     }
@@ -25173,15 +25173,15 @@ class Client {
                 throw new Error(`Failed to call ${pth}: HTTP ${statusCode}: ${respBody || '[no body]'}`);
             }
             const obj = JSON.parse(respBody);
-            const serviceID = obj.service?.id;
-            const organizationID = obj.service?.organization_id;
-            const projectID = obj.service?.project_id;
+            const serviceID = obj.principal?.service?.id;
+            const organizationID = obj.principal?.service?.organization_id;
+            const projectID = obj.principal?.service?.project_id;
             if (!serviceID || !organizationID) {
                 throw new Error(`Successfully called ${pth}, but the result contained unexpected values: ${respBody}`);
             }
             const result = {
-                projectID: projectID,
-                organizationID: organizationID
+                projectID,
+                organizationID
             };
             return result;
         }
