@@ -1,28 +1,20 @@
 {
-  "name": "typescript-action",
-  "description": "GitHub Actions TypeScript template",
+  "name": "hcp-auth-action",
   "version": "0.0.0",
+  "description": "Authenticate to HashiCorp Cloud Platform from GitHub Actions via Workload Identity Federation or service principal keys.",
+  "license": "MPL-2.0",
+  "publisher": "hashicorp",
   "author": "",
-  "private": true,
-  "homepage": "https://github.com/actions/typescript-action",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
-  },
-  "bugs": {
-    "url": "https://github.com/actions/typescript-action/issues"
+    "url": "https://github.com/hashicorp/hcp-auth-action.git"
   },
   "keywords": [
     "actions",
-    "node",
-    "setup"
+    "hcp",
+    "auth"
   ],
-  "exports": {
-    ".": "./dist/index.js"
-  },
-  "engines": {
-    "node": ">=20"
-  },
+  "main": "dist/index.js",
   "scripts": {
     "bundle": "npm run format:write && npm run package",
     "ci-test": "npx jest",
@@ -35,7 +27,6 @@
     "test": "npx jest",
     "all": "npm run format:write && npm run lint && npm run test && npm run coverage && npm run package"
   },
-  "license": "MIT",
   "jest": {
     "preset": "ts-jest",
     "verbose": true,
@@ -54,19 +45,11 @@
     ],
     "transform": {
       "^.+\\.ts$": "ts-jest"
-    },
-    "coverageReporters": [
-      "json-summary",
-      "text",
-      "lcov"
-    ],
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "./src/**"
-    ]
+    }
   },
   "dependencies": {
-    "@actions/core": "^1.10.1"
+    "@actions/core": "^1.10.1",
+    "@actions/http-client": "^2.2.1"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",

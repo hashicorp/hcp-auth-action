@@ -1590,7 +1590,7 @@ class HttpClient {
         if (this._keepAlive && useProxy) {
             agent = this._proxyAgent;
         }
-        if (this._keepAlive && !useProxy) {
+        if (!useProxy) {
             agent = this._agent;
         }
         // if agent is already assigned use that agent.
@@ -1622,15 +1622,11 @@ class HttpClient {
             agent = tunnelAgent(agentOptions);
             this._proxyAgent = agent;
         }
-        // if reusing agent across request and tunneling agent isn't assigned create a new agent
-        if (this._keepAlive && !agent) {
+        // if tunneling agent isn't assigned create a new agent
+        if (!agent) {
             const options = { keepAlive: this._keepAlive, maxSockets };
             agent = usingSsl ? new https.Agent(options) : new http.Agent(options);
             this._agent = agent;
-        }
-        // if not using private agent and tunnel agent isn't setup then use global agent
-        if (!agent) {
-            agent = usingSsl ? https.globalAgent : http.globalAgent;
         }
         if (usingSsl && this._ignoreSslError) {
             // we don't want to set NODE_TLS_REJECT_UNAUTHORIZED=0 since that will affect request for entire process
@@ -27182,7 +27178,7 @@ module.exports = parseParams
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"name":"typescript-action","description":"GitHub Actions TypeScript template","version":"0.0.0","author":"","private":true,"homepage":"https://github.com/actions/typescript-action","repository":{"type":"git","url":"git+https://github.com/actions/typescript-action.git"},"bugs":{"url":"https://github.com/actions/typescript-action/issues"},"keywords":["actions","node","setup"],"exports":{".":"./dist/index.js"},"engines":{"node":">=20"},"scripts":{"bundle":"npm run format:write && npm run package","ci-test":"npx jest","coverage":"npx make-coverage-badge --output-path ./badges/coverage.svg","format:write":"npx prettier --write .","format:check":"npx prettier --check .","lint":"npx eslint . -c ./.github/linters/.eslintrc.yml","package":"npx ncc build src/main.ts -o dist --source-map --license licenses.txt","package:watch":"npm run package -- --watch","test":"npx jest","all":"npm run format:write && npm run lint && npm run test && npm run coverage && npm run package"},"license":"MIT","jest":{"preset":"ts-jest","verbose":true,"clearMocks":true,"testEnvironment":"node","moduleFileExtensions":["js","ts"],"testMatch":["**/*.test.ts"],"testPathIgnorePatterns":["/node_modules/","/dist/"],"transform":{"^.+\\\\.ts$":"ts-jest"},"coverageReporters":["json-summary","text","lcov"],"collectCoverage":true,"collectCoverageFrom":["./src/**"]},"dependencies":{"@actions/core":"^1.10.1"},"devDependencies":{"@jest/globals":"^29.7.0","@types/jest":"^29.5.12","@types/node":"^20.14.0","@typescript-eslint/eslint-plugin":"^7.11.0","@typescript-eslint/parser":"^7.11.0","@vercel/ncc":"^0.38.1","eslint":"^8.57.0","eslint-plugin-github":"^4.10.2","eslint-plugin-jest":"^28.5.0","eslint-plugin-jsonc":"^2.16.0","eslint-plugin-prettier":"^5.1.3","jest":"^29.7.0","make-coverage-badge":"^1.2.0","prettier":"^3.3.0","prettier-eslint":"^16.3.0","ts-jest":"^29.1.4","typescript":"^5.4.5"}}');
+module.exports = JSON.parse('{"name":"hcp-auth-action","version":"0.0.0","description":"Authenticate to HashiCorp Cloud Platform from GitHub Actions via Workload Identity Federation or service principal keys.","license":"MPL-2.0","publisher":"hashicorp","author":"","repository":{"type":"git","url":"https://github.com/hashicorp/hcp-auth-action.git"},"keywords":["actions","hcp","auth"],"main":"dist/index.js","scripts":{"bundle":"npm run format:write && npm run package","ci-test":"npx jest","coverage":"npx make-coverage-badge --output-path ./badges/coverage.svg","format:write":"npx prettier --write .","format:check":"npx prettier --check .","lint":"npx eslint . -c ./.github/linters/.eslintrc.yml","package":"npx ncc build src/main.ts -o dist --source-map --license licenses.txt","package:watch":"npm run package -- --watch","test":"npx jest","all":"npm run format:write && npm run lint && npm run test && npm run coverage && npm run package"},"jest":{"preset":"ts-jest","verbose":true,"clearMocks":true,"testEnvironment":"node","moduleFileExtensions":["js","ts"],"testMatch":["**/*.test.ts"],"testPathIgnorePatterns":["/node_modules/","/dist/"],"transform":{"^.+\\\\.ts$":"ts-jest"}},"dependencies":{"@actions/core":"^1.10.1","@actions/http-client":"^2.2.1"},"devDependencies":{"@jest/globals":"^29.7.0","@types/jest":"^29.5.12","@types/node":"^20.14.0","@typescript-eslint/eslint-plugin":"^7.11.0","@typescript-eslint/parser":"^7.11.0","@vercel/ncc":"^0.38.1","eslint":"^8.57.0","eslint-plugin-github":"^5.0.1","eslint-plugin-jest":"^28.5.0","eslint-plugin-jsonc":"^2.16.0","eslint-plugin-prettier":"^5.1.3","jest":"^29.7.0","make-coverage-badge":"^1.2.0","prettier":"^3.3.0","prettier-eslint":"^16.3.0","ts-jest":"^29.1.4","typescript":"^5.4.5"}}');
 
 /***/ })
 
