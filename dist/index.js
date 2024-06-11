@@ -24970,16 +24970,10 @@ class WorkloadIdentityFederationClient {
             jwt_token: this.#githubOIDCToken
         };
         try {
-            const resp = await this.#httpClient.post(pth, JSON.stringify(reqBody), headers);
-            const respBody = await resp.readBody();
-            const statusCode = resp.message.statusCode || 500;
-            if (statusCode < 200 || statusCode > 299) {
-                throw new Error(`Failed to call ${pth}: HTTP ${statusCode}: ${respBody || '[no body]'}`);
-            }
-            const obj = JSON.parse(respBody);
-            const access_token = obj.access_token;
+            const resp = await this.#httpClient.postJson(pth, reqBody, headers);
+            const access_token = resp.result?.access_token;
             if (!access_token) {
-                throw new Error(`Successfully called ${pth}, but the result didn't contain an access_token: ${respBody}`);
+                throw new Error(`Successfully called ${pth}, but the result didn't contain an access_token: ${resp.result || '[no body]'}`);
             }
             return access_token;
         }
@@ -25055,16 +25049,10 @@ class ServicePrincipalCredsClient {
             audience: 'https://api.hashicorp.cloud'
         };
         try {
-            const resp = await this.#httpClient.post(pth, JSON.stringify(reqBody), headers);
-            const respBody = await resp.readBody();
-            const statusCode = resp.message.statusCode || 500;
-            if (statusCode < 200 || statusCode > 299) {
-                throw new Error(`Failed to call ${pth}: HTTP ${statusCode}: ${respBody || '[no body]'}`);
-            }
-            const obj = JSON.parse(respBody);
-            const access_token = obj.access_token;
+            const resp = await this.#httpClient.postJson(pth, reqBody, headers);
+            const access_token = resp.result?.access_token;
             if (!access_token) {
-                throw new Error(`Successfully called ${pth}, but the result didn't contain an access_token: ${respBody}`);
+                throw new Error(`Successfully called ${pth}, but the result didn't contain an access_token: ${resp.result || '[no body]'}`);
             }
             return access_token;
         }
@@ -25162,21 +25150,15 @@ class Client {
     async getCallerDetails() {
         const pth = 'https://api.cloud.hashicorp.com/iam/2019-12-10/caller-identity';
         try {
-            const resp = await this.#httpClient.get(pth);
-            const respBody = await resp.readBody();
-            const statusCode = resp.message.statusCode || 500;
-            if (statusCode < 200 || statusCode > 299) {
-                throw new Error(`Failed to call ${pth}: HTTP ${statusCode}: ${respBody || '[no body]'}`);
-            }
-            const obj = JSON.parse(respBody);
-            const serviceID = obj.principal?.service?.id;
-            const organizationID = obj.principal?.service?.organization_id;
-            const projectID = obj.principal?.service?.project_id;
+            const resp = await this.#httpClient.getJson(pth);
+            const serviceID = resp.result?.principal?.service?.id;
+            const organizationID = resp.result?.principal?.service?.organization_id;
+            const projectID = resp.result?.principal?.service?.project_id;
             if (!serviceID || !organizationID) {
-                throw new Error(`Successfully called ${pth}, but the result contained unexpected values: ${respBody}`);
+                throw new Error(`Successfully called ${pth}, but the result contained unexpected values: ${resp.result || '[no body]'}`);
             }
             const result = {
-                projectID,
+                projectID: projectID || '',
                 organizationID
             };
             return result;

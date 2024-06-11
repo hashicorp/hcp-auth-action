@@ -70,27 +70,18 @@ export class Client {
   async getCallerDetails(): Promise<PrincipalDetails> {
     const pth = 'https://api.cloud.hashicorp.com/iam/2019-12-10/caller-identity'
     try {
-      const resp = await this.#httpClient.get(pth)
-      const respBody = await resp.readBody()
-      const statusCode = resp.message.statusCode || 500
-      if (statusCode < 200 || statusCode > 299) {
-        throw new Error(
-          `Failed to call ${pth}: HTTP ${statusCode}: ${respBody || '[no body]'}`
-        )
-      }
-
-      const obj: CallerIdentityResponse = JSON.parse(respBody)
-      const serviceID = obj.principal?.service?.id
-      const organizationID = obj.principal?.service?.organization_id
-      const projectID = obj.principal?.service?.project_id
+      const resp = await this.#httpClient.getJson<CallerIdentityResponse>(pth)
+      const serviceID = resp.result?.principal?.service?.id
+      const organizationID = resp.result?.principal?.service?.organization_id
+      const projectID = resp.result?.principal?.service?.project_id
       if (!serviceID || !organizationID) {
         throw new Error(
-          `Successfully called ${pth}, but the result contained unexpected values: ${respBody}`
+          `Successfully called ${pth}, but the result contained unexpected values: ${resp.result || '[no body]'}`
         )
       }
 
       const result: PrincipalDetails = {
-        projectID,
+        projectID: projectID || '',
         organizationID
       }
 

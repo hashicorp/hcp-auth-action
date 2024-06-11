@@ -82,24 +82,16 @@ export class WorkloadIdentityFederationClient implements Client {
     }
 
     try {
-      const resp = await this.#httpClient.post(
+      const resp = await this.#httpClient.postJson<{ access_token: string }>(
         pth,
-        JSON.stringify(reqBody),
+        reqBody,
         headers
       )
-      const respBody = await resp.readBody()
-      const statusCode = resp.message.statusCode || 500
-      if (statusCode < 200 || statusCode > 299) {
-        throw new Error(
-          `Failed to call ${pth}: HTTP ${statusCode}: ${respBody || '[no body]'}`
-        )
-      }
 
-      const obj = JSON.parse(respBody)
-      const access_token = obj.access_token
+      const access_token = resp.result?.access_token
       if (!access_token) {
         throw new Error(
-          `Successfully called ${pth}, but the result didn't contain an access_token: ${respBody}`
+          `Successfully called ${pth}, but the result didn't contain an access_token: ${resp.result || '[no body]'}`
         )
       }
 
@@ -193,24 +185,16 @@ export class ServicePrincipalCredsClient implements Client {
     }
 
     try {
-      const resp = await this.#httpClient.post(
+      const resp = await this.#httpClient.postJson<{ access_token: string }>(
         pth,
-        JSON.stringify(reqBody),
+        reqBody,
         headers
       )
-      const respBody = await resp.readBody()
-      const statusCode = resp.message.statusCode || 500
-      if (statusCode < 200 || statusCode > 299) {
-        throw new Error(
-          `Failed to call ${pth}: HTTP ${statusCode}: ${respBody || '[no body]'}`
-        )
-      }
 
-      const obj = JSON.parse(respBody)
-      const access_token = obj.access_token
+      const access_token = resp.result?.access_token
       if (!access_token) {
         throw new Error(
-          `Successfully called ${pth}, but the result didn't contain an access_token: ${respBody}`
+          `Successfully called ${pth}, but the result didn't contain an access_token: ${resp.result || '[no body]'}`
         )
       }
 
