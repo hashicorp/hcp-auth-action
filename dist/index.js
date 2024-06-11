@@ -24925,13 +24925,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ServicePrincipalCredsClient = exports.WorkloadIdentityFederationClient = void 0;
 const http_client_1 = __nccwpck_require__(6255);
 const fs_1 = __nccwpck_require__(7147);
-// eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-commonjs, @typescript-eslint/no-require-imports
-const { version: appVersion } = __nccwpck_require__(4147);
-//
-// sourceChannel is the header that identifies the source of the request.
-const sourceChannel = `X-HCP-Source-Channel`;
-// actionVersion contains the string version of the action.
-const actionVersion = `hcp-auth-action/${appVersion}`;
+const utils_1 = __nccwpck_require__(1314);
 /**
  * WorkloadIdentityFederationClient is an authentication client that configures
  * a Workload Identity authentication scheme.
@@ -24950,7 +24944,7 @@ class WorkloadIdentityFederationClient {
         this.#githubOIDCTokenAudience = opts.githubOIDCTokenAudience;
         this.#wipResourceName = opts.workloadIdentityProviderResourceName;
         // Create the http client with our user agent.
-        this.#httpClient = new http_client_1.HttpClient(actionVersion, undefined, {
+        this.#httpClient = new http_client_1.HttpClient(utils_1.actionVersion, undefined, {
             allowRedirects: true,
             allowRetries: true,
             keepAlive: true,
@@ -24964,7 +24958,7 @@ class WorkloadIdentityFederationClient {
     async getToken() {
         const pth = `https://api.cloud.hashicorp.com/2019-12-10/${this.#wipResourceName}/exchange-token`;
         const headers = {
-            [sourceChannel]: actionVersion
+            [utils_1.sourceChannel]: utils_1.actionVersion
         };
         const reqBody = {
             jwt_token: this.#githubOIDCToken
@@ -25026,7 +25020,7 @@ class ServicePrincipalCredsClient {
         this.#clientID = opts.clientID;
         this.#clientSecret = opts.clientSecret;
         // Create the http client with our user agent.
-        this.#httpClient = new http_client_1.HttpClient(actionVersion, undefined, {
+        this.#httpClient = new http_client_1.HttpClient(utils_1.actionVersion, undefined, {
             allowRedirects: true,
             allowRetries: true,
             keepAlive: true,
@@ -25117,14 +25111,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Client = void 0;
 const http_client_1 = __nccwpck_require__(6255);
 const Auth = __importStar(__nccwpck_require__(5526));
-// TODO refactor
-// eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-commonjs, @typescript-eslint/no-require-imports
-const { version: appVersion } = __nccwpck_require__(4147);
-//
-// sourceChannel is the header that identifies the source of the request.
-const sourceChannel = `X-HCP-Source-Channel`;
-// actionVersion contains the string version of the action.
-const actionVersion = `hcp-auth-action/${appVersion}`;
+const utils_1 = __nccwpck_require__(1314);
 /**
  * Client is a client that retrieves details about the authenticated principal
  */
@@ -25133,14 +25120,14 @@ class Client {
     constructor(accessToken) {
         const ph = new Auth.BearerCredentialHandler(accessToken);
         // Create the http client with our user agent.
-        this.#httpClient = new http_client_1.HttpClient(actionVersion, [ph], {
+        this.#httpClient = new http_client_1.HttpClient(utils_1.actionVersion, [ph], {
             allowRedirects: true,
             allowRetries: true,
             keepAlive: true,
             maxRedirects: 5,
             maxRetries: 3,
             headers: {
-                [sourceChannel]: actionVersion
+                [utils_1.sourceChannel]: utils_1.actionVersion
             }
         });
     }
@@ -25303,6 +25290,24 @@ async function realRun() {
         }
     }
 }
+
+
+/***/ }),
+
+/***/ 1314:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.actionVersion = exports.sourceChannel = exports.appVersion = void 0;
+// Read the package.json file to get the version of the action.
+// eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-commonjs, @typescript-eslint/no-require-imports
+exports.appVersion = __nccwpck_require__(4147).version;
+// sourceChannel is the header that identifies the source of the request.
+exports.sourceChannel = `X-HCP-Source-Channel`;
+// actionVersion contains the string version of the action.
+exports.actionVersion = `hcp-auth-action/${exports.appVersion}`;
 
 
 /***/ }),
@@ -27160,7 +27165,7 @@ module.exports = parseParams
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"name":"hcp-auth-action","version":"0.0.0","description":"Authenticate to HashiCorp Cloud Platform from GitHub Actions via Workload Identity Federation or service principal keys.","license":"MPL-2.0","publisher":"hashicorp","author":"","repository":{"type":"git","url":"https://github.com/hashicorp/hcp-auth-action.git"},"keywords":["actions","hcp","auth"],"main":"dist/index.js","scripts":{"bundle":"npm run format:write && npm run package","ci-test":"npx jest","coverage":"npx make-coverage-badge --output-path ./badges/coverage.svg","format:write":"npx prettier --write .","format:check":"npx prettier --check .","lint":"npx eslint . -c ./.github/linters/.eslintrc.yml","package":"npx ncc build src/main.ts -o dist --source-map --license licenses.txt","package:watch":"npm run package -- --watch","test":"npx jest","all":"npm run format:write && npm run lint && npm run test && npm run coverage && npm run package"},"jest":{"preset":"ts-jest","verbose":true,"clearMocks":true,"testEnvironment":"node","moduleFileExtensions":["js","ts"],"testMatch":["**/*.test.ts"],"testPathIgnorePatterns":["/node_modules/","/dist/"],"transform":{"^.+\\\\.ts$":"ts-jest"}},"dependencies":{"@actions/core":"^1.10.1","@actions/http-client":"^2.2.1"},"devDependencies":{"@jest/globals":"^29.7.0","@types/jest":"^29.5.12","@types/node":"^20.14.0","@typescript-eslint/eslint-plugin":"^7.11.0","@typescript-eslint/parser":"^7.11.0","@vercel/ncc":"^0.38.1","eslint":"^8.57.0","eslint-plugin-github":"^5.0.1","eslint-plugin-jest":"^28.5.0","eslint-plugin-jsonc":"^2.16.0","eslint-plugin-prettier":"^5.1.3","jest":"^29.7.0","make-coverage-badge":"^1.2.0","prettier":"^3.3.0","prettier-eslint":"^16.3.0","ts-jest":"^29.1.4","typescript":"^5.4.5"}}');
+module.exports = {"version":"0.0.0"};
 
 /***/ })
 

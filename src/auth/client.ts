@@ -1,14 +1,6 @@
 import { HttpClient } from '@actions/http-client'
 import { promises as fs } from 'fs'
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-commonjs, @typescript-eslint/no-require-imports
-const { version: appVersion } = require('../../package.json')
-//
-// sourceChannel is the header that identifies the source of the request.
-const sourceChannel = `X-HCP-Source-Channel`
-
-// actionVersion contains the string version of the action.
-const actionVersion = `hcp-auth-action/${appVersion}`
+import { sourceChannel, actionVersion } from '../utils'
 
 /**
  * Client defines the interface for an auth client that can be used to
