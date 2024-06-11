@@ -24982,9 +24982,7 @@ class WorkloadIdentityFederationClient {
     async createCredentialsFile(outputPath) {
         const requestURL = new URL(this.#githubOIDCTokenRequestURL);
         // Append the audience value to the request.
-        const params = requestURL.searchParams;
-        params.set('audience', this.#githubOIDCTokenAudience);
-        requestURL.search = params.toString();
+        requestURL.searchParams.set('audience', this.#githubOIDCTokenAudience);
         const data = {
             scheme: `workload`,
             workload: {
@@ -25036,17 +25034,24 @@ class ServicePrincipalCredsClient {
         const headers = {
             'content-type': 'application/x-www-form-urlencoded'
         };
-        const reqBody = {
+        const params = {
             grant_type: 'client_credentials',
             client_id: this.#clientID,
             client_secret: this.#clientSecret,
             audience: 'https://api.hashicorp.cloud'
         };
+        const searchParams = new URLSearchParams(params);
         try {
-            const resp = await this.#httpClient.postJson(pth, reqBody, headers);
-            const access_token = resp.result?.access_token;
+            const resp = await this.#httpClient.post(pth, searchParams.toString(), headers);
+            const respBody = await resp.readBody();
+            const statusCode = resp.message.statusCode || 500;
+            if (statusCode < 200 || statusCode > 299) {
+                throw new Error(`Failed to call ${pth}: HTTP ${statusCode}: ${respBody || '[no body]'}`);
+            }
+            const obj = JSON.parse(respBody);
+            const access_token = obj.access_token;
             if (!access_token) {
-                throw new Error(`Successfully called ${pth}, but the result didn't contain an access_token: ${resp.result || '[no body]'}`);
+                throw new Error(`Successfully called ${pth}, but the result didn't contain an access_token: ${respBody}`);
             }
             return access_token;
         }

@@ -40,8 +40,8 @@ jobs:
         id: npm-lint
         run: npm run lint
 
-  test-action:
-    name: GitHub Actions Test
+  test-wip:
+    name: Test Workload Identity Federation
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
@@ -65,3 +65,28 @@ jobs:
           echo "${{ steps.test-action.outputs.project_id }}"
           echo "${{ steps.test-action.outputs.credentials_file_path }}"
           cat "${{ steps.test-action.outputs.credentials_file_path }}"
+
+  test-sp-creds:
+    name: Test Service Principal Credentials
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Test Local Action
+        id: test-action
+        uses: ./
+        with:
+          client_id: ${{ secrets.TEST_SP_CLIENT_ID }}
+          client_secret: ${{ secrets.TEST_SP_CLIENT_SECRET }}
+
+      - name: Print Output
+        id: output
+        run: |
+          echo "${{ steps.test-action.outputs.organization_id }}"
+          echo "${{ steps.test-action.outputs.project_id }}"
