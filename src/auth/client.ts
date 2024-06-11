@@ -101,9 +101,7 @@ export class WorkloadIdentityFederationClient implements Client {
     const requestURL = new URL(this.#githubOIDCTokenRequestURL)
 
     // Append the audience value to the request.
-    const params = requestURL.searchParams
-    params.set('audience', this.#githubOIDCTokenAudience)
-    requestURL.search = params.toString()
+    requestURL.searchParams.set('audience', this.#githubOIDCTokenAudience)
 
     const data: Record<string, unknown> = {
       scheme: `workload`,
