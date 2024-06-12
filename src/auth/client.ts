@@ -13,9 +13,8 @@ export interface Client {
   getToken(): Promise<string>
 
   /**
-   * createCredentialsFile creates a credential file (for use with gcloud and
-   * other Google Cloud tools) that instructs the tool how to perform identity
-   * federation.
+   * createCredentialsFile creates a credential file (for use with hcp CLI and
+   * other HCP tools) that instructs the tool how to perform identity federation.
    */
   createCredentialsFile(outputPath: string): Promise<string>
 }
