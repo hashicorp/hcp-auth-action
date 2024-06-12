@@ -92,7 +92,7 @@ async function realRun(): Promise<void> {
   // Create credentials file and export the GHA_HCP_CRED_FILE variable so that
   // we can cleanup the file.
   const randomPart = crypto.randomBytes(8).toString('hex')
-  const outputFile = `creds-${randomPart}.json`
+  const outputFile = `gha-creds-${randomPart}.json`
   const outputPath = pathjoin(githubWorkspace, outputFile)
   const credentialsPath = await client.createCredentialsFile(outputPath)
   setOutput('credentials_file_path', credentialsPath)
