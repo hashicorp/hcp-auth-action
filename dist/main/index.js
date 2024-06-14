@@ -25289,10 +25289,6 @@ async function realRun() {
     // Export the environment variables if requested.
     if (exportEnvironmentVariables) {
         (0, core_1.exportVariable)('HCP_CRED_FILE', credentialsPath);
-        (0, core_1.exportVariable)('HCP_ORGANIZATION_ID', spDetails.organizationID);
-        if (spDetails.projectID) {
-            (0, core_1.exportVariable)('HCP_PROJECT_ID', credentialsPath);
-        }
     }
 }
 

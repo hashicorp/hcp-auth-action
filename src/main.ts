@@ -116,9 +116,5 @@ async function realRun(): Promise<void> {
   // Export the environment variables if requested.
   if (exportEnvironmentVariables) {
     exportVariable('HCP_CRED_FILE', credentialsPath)
-    exportVariable('HCP_ORGANIZATION_ID', spDetails.organizationID)
-    if (spDetails.projectID) {
-      exportVariable('HCP_PROJECT_ID', credentialsPath)
-    }
   }
 }
