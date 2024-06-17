@@ -45,12 +45,8 @@ inputs:
     required: false
     default: true
     description: |-
-      If true, the action will export common environment variables which are
-      consumed by HCP tooling:
-
-      - HCP_ORGANIZATION_ID
-      - HCP_PROJECT_ID
-      - HCP_CRED_FILE
+      If true, the action will export the HCP_CRED_FILE environment variable for subsequent
+      steps to use.
 
       If false, the action will not export any environment variables, meaning
       future steps are unlikely to be automatically authenticated to HCP and the
