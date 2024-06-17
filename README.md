@@ -1,229 +1,231 @@
-# Create a GitHub Action Using TypeScript
+# Authenticate to HashiCorp Cloud Platform (HCP) From GitHub Actions
 
-[![GitHub Super-Linter](https://github.com/actions/typescript-action/actions/workflows/linter.yml/badge.svg)](https://github.com/super-linter/super-linter)
-![CI](https://github.com/actions/typescript-action/actions/workflows/ci.yml/badge.svg)
-[![Check dist/](https://github.com/actions/typescript-action/actions/workflows/check-dist.yml/badge.svg)](https://github.com/actions/typescript-action/actions/workflows/check-dist.yml)
-[![CodeQL](https://github.com/actions/typescript-action/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/actions/typescript-action/actions/workflows/codeql-analysis.yml)
-[![Coverage](./badges/coverage.svg)](./badges/coverage.svg)
+This GitHub Action authenticates to
+[HashiCorp Cloud Platform (HCP)](https://www.hashicorp.com/cloud) and makes
+credentials available to subsequent Action steps. Pair this action with
+[hashicorp/hcp-setup-action](https://github.com/hashicorp/hcp-setup-action) to
+use HCP services from your Workflow using the [HCP CLI][hcp-cli].
 
-Use this template to bootstrap the creation of a TypeScript action. :rocket:
-
-This template includes compilation support, tests, a validation workflow,
-publishing, and versioning guidance.
-
-If you are new, there's also a simpler introduction in the
-[Hello world JavaScript action repository](https://github.com/actions/hello-world-javascript-action).
-
-## Create Your Own Action
-
-To create your own action, you can use this repository as a template! Just
-follow the below instructions:
-
-1. Click the **Use this template** button at the top of the repository
-1. Select **Create a new repository**
-1. Select an owner and name for your new repository
-1. Click **Create repository**
-1. Clone your new repository
-
-> [!IMPORTANT]
->
-> Make sure to remove or update the [`CODEOWNERS`](./CODEOWNERS) file! For
-> details on how to use this file, see
-> [About code owners](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners).
-
-## Initial Setup
-
-After you've cloned the repository to your local machine or codespace, you'll
-need to perform some initial setup steps before you can develop your action.
-
-> [!NOTE]
->
-> You'll need to have a reasonably modern version of
-> [Node.js](https://nodejs.org) handy (20.x or later should work!). If you are
-> using a version manager like [`nodenv`](https://github.com/nodenv/nodenv) or
-> [`nvm`](https://github.com/nvm-sh/nvm), this template has a `.node-version`
-> file at the root of the repository that will be used to automatically switch
-> to the correct version when you `cd` into the repository. Additionally, this
-> `.node-version` file is used by GitHub Actions in any `actions/setup-node`
-> actions.
-
-1. :hammer_and_wrench: Install the dependencies
-
-   ```bash
-   npm install
-   ```
-
-1. :building_construction: Package the TypeScript for distribution
-
-   ```bash
-   npm run bundle
-   ```
-
-1. :white_check_mark: Run the tests
-
-   ```bash
-   $ npm test
-
-   PASS  ./index.test.js
-     ✓ throws invalid number (3ms)
-     ✓ wait 500 ms (504ms)
-     ✓ test runs (95ms)
-
-   ...
-   ```
-
-## Update the Action Metadata
-
-The [`action.yml`](action.yml) file defines metadata about your action, such as
-input(s) and output(s). For details about this file, see
-[Metadata syntax for GitHub Actions](https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions).
-
-When you copy this repository, update `action.yml` with the name, description,
-inputs, and outputs for your action.
-
-## Update the Action Code
-
-The [`src/`](./src/) directory is the heart of your action! This contains the
-source code that will be run when your action is invoked. You can replace the
-contents of this directory with your own code.
-
-There are a few things to keep in mind when writing your action code:
-
-- Most GitHub Actions toolkit and CI/CD operations are processed asynchronously.
-  In `main.ts`, you will see that the action is run in an `async` function.
-
-  ```javascript
-  import * as core from '@actions/core'
-  //...
-
-  async function run() {
-    try {
-      //...
-    } catch (error) {
-      core.setFailed(error.message)
-    }
-  }
-  ```
-
-  For more information about the GitHub Actions toolkit, see the
-  [documentation](https://github.com/actions/toolkit/blob/master/README.md).
-
-So, what are you waiting for? Go ahead and start customizing your action!
-
-1. Create a new branch
-
-   ```bash
-   git checkout -b releases/v1
-   ```
-
-1. Replace the contents of `src/` with your action code
-1. Add tests to `__tests__/` for your source code
-1. Format, test, and build the action
-
-   ```bash
-   npm run all
-   ```
-
-   > This step is important! It will run [`ncc`](https://github.com/vercel/ncc)
-   > to build the final JavaScript action code with all dependencies included.
-   > If you do not run this step, your action will not work correctly when it is
-   > used in a workflow. This step also includes the `--license` option for
-   > `ncc`, which will create a license file for all of the production node
-   > modules used in your project.
-
-1. Commit your changes
-
-   ```bash
-   git add .
-   git commit -m "My first action is ready!"
-   ```
-
-1. Push them to your repository
-
-   ```bash
-   git push -u origin releases/v1
-   ```
-
-1. Create a pull request and get feedback on your action
-1. Merge the pull request into the `main` branch
-
-Your action is now published! :rocket:
-
-For information about versioning your action, see
-[Versioning](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-in the GitHub Actions toolkit.
-
-## Validate the Action
-
-You can now validate the action by referencing it in a workflow file. For
-example, [`ci.yml`](./.github/workflows/ci.yml) demonstrates how to reference an
-action in the same repository.
-
-```yaml
-steps:
-  - name: Checkout
-    id: checkout
-    uses: actions/checkout@v4
-
-  - name: Test Local Action
-    id: test-action
-    uses: ./
-    with:
-      milliseconds: 1000
-
-  - name: Print Output
-    id: output
-    run: echo "${{ steps.test-action.outputs.time }}"
-```
-
-For example workflow runs, check out the
-[Actions tab](https://github.com/actions/typescript-action/actions)! :rocket:
+This action supports authenticating either via Workload Identity Federation or
+via Service Principal credentials. It is **strongly recommended** to use
+Workload Identity Federation, as it does not require creating and storing any
+long lived credential. Instead a trust relationship is created between the
+GitHub Actions and HCP, which can be tightly scoped.
 
 ## Usage
 
-After testing, you can create version tag(s) that developers can use to
-reference different stable versions of your action. For more information, see
-[Versioning](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-in the GitHub Actions toolkit.
-
-To include the action in a workflow in another repository, you can use the
-`uses` syntax with the `@` symbol to reference a specific branch, tag, or commit
-hash.
-
 ```yaml
-steps:
-  - name: Checkout
-    id: checkout
-    uses: actions/checkout@v4
+jobs:
+  job_id:
+    # "id-token" is needed when using Workload Identity Federation.
+    permissions:
+      contents: 'read'
+      id-token: 'write'
 
-  - name: Test Local Action
-    id: test-action
-    uses: actions/typescript-action@v1 # Commit with the `v1` tag
-    with:
-      milliseconds: 1000
-
-  - name: Print Output
-    id: output
-    run: echo "${{ steps.test-action.outputs.time }}"
+    steps:
+      - uses: 'hashicorp/hcp-auth-action@v0'
+        with:
+          workload_identity_provider: 'iam/project/123456789/service-principal/my-sp/workload-identity-provider/my-provider'
 ```
 
-## Publishing a New Release
+## Inputs
 
-This project includes a helper script, [`script/release`](./script/release)
-designed to streamline the process of tagging and pushing new releases for
-GitHub Actions.
+### Inputs: Workload Identity Federation
 
-GitHub Actions allows users to select a specific version of the action to use,
-based on release tags. This script simplifies this process by performing the
-following steps:
+The follow Action Inputs are for use when authenticating using Workload Identity
+Federation.
 
-1. **Retrieving the latest release tag:** The script starts by fetching the most
-   recent release tag by looking at the local data available in your repository.
-1. **Prompting for a new release tag:** The user is then prompted to enter a new
-   release tag. To assist with this, the script displays the latest release tag
-   and provides a regular expression to validate the format of the new tag.
-1. **Tagging the new release:** Once a valid new tag is entered, the script tags
-   the new release.
-1. **Pushing the new tag to the remote:** Finally, the script pushes the new tag
-   to the remote repository. From here, you will need to create a new release in
-   GitHub and users can easily reference the new tag in their workflows.
+- `workload_identity_provider` - (Required) The full name of the Workload
+  Identity Provider to use for authentication. This should be in the format
+  `iam/project/1234/service-principal/my-sp/workload-identity-provider/my-wip`.
+
+- `audience` - (Optional) The value for the audience (`aud`) parameter in the
+  generated GitHub Actions OIDC token. The audience must match the audience the
+  HCP Workload Identity Provider expects. By default, HCP expects the audience
+  to be the same as the `workload_identity_provider` value. For most use cases,
+  this value should not be set.
+
+### Inputs: Service Principal Credentials
+
+> [!CAUTION]
+>
+> Service Principal Credentials are long-lived credentials and must be treated
+> like a password. It is **strongly recommended** to use Workload Identity
+> Federation instead.
+
+The follow Action Inputs are for use when authenticating using Service Principal
+Credentials.
+
+- `client_id` - (Required) The client ID of the Service Principal to use for
+  authentication.
+
+- `client_secret` - (Required) The client secret of the Service Principal to use
+  for authentication.
+
+### Inputs: Common
+
+The following inputs are common to both Workload Identity Federation and Service
+Principal Credentials.
+
+- `set_access_token` - (Optional) If true, the action will set the access token
+  as an output. This can be useful for downstream steps that need to directly
+  use the access token to authenticate to HashiCorp Cloud Platform. Default is
+  `false`.
+
+- `export_environment_variables` - (Optional) If true, the action will set the
+  `HCP_CRED_FILE` environment variable. If false, the action will not export any
+  environment variables, meaning future steps are unlikely to be automatically
+  authenticated to HCP.
+
+## Outputs
+
+- `organization_id`: The HashiCorp Cloud Platform organization ID that the
+  Service Principal is a member of.
+
+- `project_id`: The HashiCorp Cloud Platform Project ID that the Service
+  Principal was created in. If using an organization level Service Principal,
+  this will not be set.
+
+- `credentials_file_path`: Path on the local filesystem where the generated
+  credentials file resides.
+
+- `access_token`: The access token for calling HCP APIs. This is only available
+  when "set_access_token" is true.
+
+## Setup
+
+This section describes the possible configuration options:
+
+1. [(Preferred) Workload Identity Federation](#preferred-workload-identity-federation)
+1. [Service Principal Credentials](#service-principal-credentials)
+
+### (Preferred) Workload Identity Federation
+
+When using Workload Identity Federation, the GitHub Action's OIDC token will be
+sent to the configured Workload Identity Provider. HCP will validate the token
+and return a short-lived access token that can be used to authenticate to HCP.
+
+These instructions use the [hcp][hcp-cli] command-line tool.
+
+1. Create a Service Principal in HCP.
+
+   ```sh
+   # TODO: replace ${PROJECT_ID} with your value below.
+   hcp iam service-principals create "my-sp" --project "${PROJECT_ID}"
+   ```
+
+1. Create the Workload Identity Provider and set it up to only allow GitHub
+   Actions running in a particular repository to authenticate.
+
+   ```sh
+   # TODO: replace ${PROJECT_ID}, ${GITHUB_ORG}, and ${GITHB_REPO} with
+   # your values below.
+   hcp iam workload-identity-providers create-oidc "github" \
+     --project "${PROJECT_ID}" \
+     --service-principal "iam/project/${PROJECT_ID}/service-principal/my-sp" \
+     --issuer="https://token.actions.githubusercontent.com" \
+     --conditional-access 'jwt_claims.repository == "${GITHUB_ORG}/${GITHUB_REPO}"'
+   ```
+
+1. Grant the created Service Principal a role on a resource. For this example,
+   we will give it access to read Vault Secrets within the project.
+
+   ```sh
+   # TODO: replace ${PROJECT_ID} and ${SERVICE_PRINCIPAL_RESOURCE_ID} with your
+   # values below.
+   hcp projects add-binding \
+     --project=${PROJECT_ID} \
+     --member=${SERVICE_PRINCIPAL_RESOURCE_ID} \
+     --role=roles/secrets.app-secret-reader
+   ```
+
+1. Add the `hashicorp/hcp-auth-action` to your GitHub Actions workflow.
+
+   ```yaml
+   jobs:
+     job_id:
+       # "id-token" is needed when using Workload Identity Federation.
+       permissions:
+         contents: 'read'
+         id-token: 'write'
+
+       steps:
+         - uses: 'hashicorp/hcp-auth-action@v0'
+           with:
+             workload_identity_provider: '...' # 'iam/project/123456789/service-principal/my-sp/workload-identity-provider/github'
+
+         - uses: 'hashicorp/hcp-setup-action@v0'
+           with:
+             version: 'latest'
+
+         - name: 'Read a secret and inject as an environment variable'
+           run: |
+             hcp vs secrets open --app=my-app --format=json my-secret | \
+             jq -r '"MY_SECRET=\(.version.value)"' >> $GITHUB_ENV'
+             echo "::add-mask::$MY_SECRET"
+   ```
+
+### Service Principal Credentials
+
+When using Service Principal Credentials, the GitHub Action will authenticate to
+HCP using the provided Client ID and Client Secret. The credential pair is
+long-lived and must be treated like a password. As such, these credentials
+should be stored as
+[GitHub Actions Secrets](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions).
+
+These instructions use the [hcp][hcp-cli] command-line tool.
+
+1. Create a Service Principal in HCP.
+
+   ```sh
+   # TODO: replace ${PROJECT_ID} with your value below.
+   hcp iam service-principals create "my-sp" --project "${PROJECT_ID}"
+   ```
+
+1. Create a Service Principal Key.
+
+   ```sh
+   # TODO: replace ${PROJECT_ID} with your value below.
+   hcp iam service-principals keys create iam/project/${PROJECT_ID}/service-principal/my-sp
+   ```
+
+1. Create a
+   [GitHub Actions Secrets](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions)
+   named `HCP_CLIENT_ID` and `HCP_CLIENT_SECRET` with the values of the Service
+   Principal's Client ID and Client Secret.
+
+1. Grant the created Service Principal a role on a resource. For this example,
+   we will give it access to read Vault Secrets within the project.
+
+   ```sh
+   # TODO: replace ${PROJECT_ID} and ${SERVICE_PRINCIPAL_RESOURCE_ID} with your
+   # values below.
+   hcp projects add-binding \
+     --project=${PROJECT_ID} \
+     --member=${SERVICE_PRINCIPAL_RESOURCE_ID} \
+     --role=roles/secrets.app-secret-reader
+   ```
+
+1. Add the `hashicorp/hcp-auth-action` to your GitHub Actions workflow.
+
+   ```yaml
+   jobs:
+     job_id:
+       steps:
+         - uses: 'hashicorp/hcp-auth-action@v0'
+           with:
+             client_id: ${{ secrets.HCP_CLIENT_ID }}
+             client_secret: ${{ secrets.HCP_CLIENT_SECRET }}
+
+         - uses: 'hashicorp/hcp-setup-action@v0'
+           with:
+             version: 'latest'
+
+         - name: 'Read a secret and inject as an environment variable'
+           run: |
+             hcp vs secrets open --app=my-app --format=json my-secret | \
+             jq -r '"MY_SECRET=\(.version.value)"' >> $GITHUB_ENV'
+             echo "::add-mask::$MY_SECRET"
+   ```
+
+[hcp-cli]: https://developer.hashicorp.com/hcp/docs/cli
