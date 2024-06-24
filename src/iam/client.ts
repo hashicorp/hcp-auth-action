@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ */
+
 import { HttpClient } from '@actions/http-client'
 import * as Auth from '@actions/http-client/lib/auth'
 import { sourceChannel, actionVersion } from '../utils'

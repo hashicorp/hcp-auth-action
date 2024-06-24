@@ -1,3 +1,5 @@
+# Copyright (c) HashiCorp, Inc.
+
 rules:
   document-end: disable
   document-start:

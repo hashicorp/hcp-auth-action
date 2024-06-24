@@ -24921,6 +24921,9 @@ exports["default"] = _default;
 
 "use strict";
 
+/**
+ * Copyright (c) HashiCorp, Inc.
+ */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ServicePrincipalCredsClient = exports.WorkloadIdentityFederationClient = void 0;
 const http_client_1 = __nccwpck_require__(6255);
@@ -25089,6 +25092,9 @@ exports.ServicePrincipalCredsClient = ServicePrincipalCredsClient;
 
 "use strict";
 
+/**
+ * Copyright (c) HashiCorp, Inc.
+ */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -25170,6 +25176,9 @@ exports.Client = Client;
 
 "use strict";
 
+/**
+ * Copyright (c) HashiCorp, Inc.
+ */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -25300,6 +25309,9 @@ async function realRun() {
 
 "use strict";
 
+/**
+ * Copyright (c) HashiCorp, Inc.
+ */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.actionVersion = exports.sourceChannel = exports.appVersion = void 0;
 // Read the package.json file to get the version of the action.
