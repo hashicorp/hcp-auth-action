@@ -140,6 +140,8 @@ These instructions use the [hcp][hcp-cli] command-line tool.
    ```
 
 1. Add the `hashicorp/hcp-auth-action` to your GitHub Actions workflow.
+   <!-- markdownlint-capture -->
+   <!-- markdownlint-disable -->
 
    ```yaml
    jobs:
@@ -160,10 +162,12 @@ These instructions use the [hcp][hcp-cli] command-line tool.
 
          - name: 'Read a secret and inject as an environment variable'
            run: |
-             hcp vs secrets open --app=my-app --format=json my-secret | \
+             hcp vault-secrets secrets open --app=my-app --format=json my-secret | \
              jq -r '"MY_SECRET=\(.version.value)"' >> $GITHUB_ENV'
              echo "::add-mask::$MY_SECRET"
    ```
+
+   <!-- markdownlint-restore -->
 
 ### Service Principal Credentials
 
@@ -207,6 +211,8 @@ These instructions use the [hcp][hcp-cli] command-line tool.
    ```
 
 1. Add the `hashicorp/hcp-auth-action` to your GitHub Actions workflow.
+   <!-- markdownlint-capture -->
+   <!-- markdownlint-disable -->
 
    ```yaml
    jobs:
@@ -223,9 +229,11 @@ These instructions use the [hcp][hcp-cli] command-line tool.
 
          - name: 'Read a secret and inject as an environment variable'
            run: |
-             hcp vs secrets open --app=my-app --format=json my-secret | \
+             hcp vault-secrets secrets open --app=my-app --format=json my-secret | \
              jq -r '"MY_SECRET=\(.version.value)"' >> $GITHUB_ENV'
              echo "::add-mask::$MY_SECRET"
    ```
+
+   <!-- markdownlint-restore -->
 
 [hcp-cli]: https://developer.hashicorp.com/hcp/docs/cli
