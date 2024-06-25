@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ */
+
 import { setFailed, info, warning } from '@actions/core'
 import { rmRF } from '@actions/io'
 

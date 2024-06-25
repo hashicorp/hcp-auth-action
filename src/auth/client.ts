@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ */
+
 import { HttpClient } from '@actions/http-client'
 import { promises as fs } from 'fs'
 import { sourceChannel, actionVersion } from '../utils'

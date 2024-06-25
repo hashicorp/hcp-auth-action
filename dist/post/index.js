@@ -27305,6 +27305,9 @@ var __webpack_exports__ = {};
 "use strict";
 var exports = __webpack_exports__;
 
+/**
+ * Copyright (c) HashiCorp, Inc.
+ */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core_1 = __nccwpck_require__(2186);
