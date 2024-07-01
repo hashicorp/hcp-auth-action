@@ -27178,7 +27178,7 @@ module.exports = parseParams
 /***/ ((module) => {
 
 "use strict";
-module.exports = {"version":"0.0.0"};
+module.exports = {"version":"0.1.0"};
 
 /***/ })
 
