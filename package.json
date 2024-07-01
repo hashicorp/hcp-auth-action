@@ -1,6 +1,6 @@
 {
   "name": "hcp-auth-action",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Authenticate to HashiCorp Cloud Platform from GitHub Actions via Workload Identity Federation or service principal keys.",
   "license": "MPL-2.0",
   "publisher": "hashicorp",
