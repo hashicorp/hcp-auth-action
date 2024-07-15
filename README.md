@@ -162,9 +162,10 @@ These instructions use the [hcp][hcp-cli] command-line tool.
 
          - name: 'Read a secret and inject as an environment variable'
            run: |
-             hcp vault-secrets secrets open --app=my-app --format=json my-secret | \
-             jq -r '"MY_SECRET=\(.version.value)"' >> $GITHUB_ENV'
+             MY_SECRET=$(hcp vault-secrets secrets open \
+               --app=cli --format=json foo | jq -r '.static_version.value')
              echo "::add-mask::$MY_SECRET"
+             echo "MY_SECRET=$MY_SECRET" >> $GITHUB_ENV
    ```
 
    <!-- markdownlint-restore -->
@@ -229,9 +230,10 @@ These instructions use the [hcp][hcp-cli] command-line tool.
 
          - name: 'Read a secret and inject as an environment variable'
            run: |
-             hcp vault-secrets secrets open --app=my-app --format=json my-secret | \
-             jq -r '"MY_SECRET=\(.version.value)"' >> $GITHUB_ENV'
+             MY_SECRET=$(hcp vault-secrets secrets open \
+               --app=cli --format=json foo | jq -r '.static_version.value')
              echo "::add-mask::$MY_SECRET"
+             echo "MY_SECRET=$MY_SECRET" >> $GITHUB_ENV
    ```
 
    <!-- markdownlint-restore -->
