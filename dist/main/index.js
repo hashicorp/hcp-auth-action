@@ -25216,7 +25216,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.run = void 0;
+exports.run = run;
 const core_1 = __nccwpck_require__(2186);
 const Auth = __importStar(__nccwpck_require__(5595));
 const Iam = __importStar(__nccwpck_require__(9989));
@@ -25237,7 +25237,6 @@ async function run() {
         (0, core_1.setFailed)(`hashicorp/hcp-auth-action failed: ${err.message}`);
     }
 }
-exports.run = run;
 async function realRun() {
     const workloadIdentityProvider = (0, core_1.getInput)(`workload_identity_provider`);
     const oidcTokenAudience = (0, core_1.getInput)(`audience`) || workloadIdentityProvider;
