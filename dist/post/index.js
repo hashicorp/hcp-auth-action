@@ -27322,7 +27322,7 @@ var exports = __webpack_exports__;
  * Copyright (c) HashiCorp, Inc.
  */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.run = void 0;
+exports.run = run;
 const core_1 = __nccwpck_require__(2186);
 const io_1 = __nccwpck_require__(7436);
 /**
@@ -27346,7 +27346,6 @@ async function run() {
         (0, core_1.setFailed)(`hashicorp/hcp-auth-action post failed with: ${err}`);
     }
 }
-exports.run = run;
 run();
 
 })();
