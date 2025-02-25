@@ -1,26 +1,20 @@
+---
 version: 2
-updates:
-  - package-ecosystem: github-actions
-    directory: /
-    schedule:
-      interval: weekly
-    groups:
-      actions-minor:
-        update-types:
-          - minor
-          - patch
 
-  - package-ecosystem: npm
-    directory: /
+updates:
+  - package-ecosystem: "gomod"
+    directory: "/"
     schedule:
-      interval: weekly
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "America/New_York"
     groups:
-      npm-development:
-        dependency-type: development
+      gomod-breaking:
+        update-types:
+          - major
+      gomod-backward-compatible:
         update-types:
           - minor
           - patch
-      npm-production:
-        dependency-type: production
-        update-types:
-          - patch
+    open-pull-requests-limit: 1
