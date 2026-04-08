@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2024
  */
 
 import { HttpClient } from '@actions/http-client'
