@@ -3,7 +3,7 @@
  */
 
 // Read the package.json file to get the version of the action.
-// eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-commonjs, @typescript-eslint/no-require-imports
+// eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
 export const { version: appVersion } = require('../package.json')
 
 // sourceChannel is the header that identifies the source of the request.

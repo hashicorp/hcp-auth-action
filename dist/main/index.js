@@ -44671,7 +44671,7 @@ async function realRun() {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.actionVersion = exports.sourceChannel = exports.appVersion = void 0;
 // Read the package.json file to get the version of the action.
-// eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-commonjs, @typescript-eslint/no-require-imports
+// eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
 exports.appVersion = __nccwpck_require__(4147).version;
 // sourceChannel is the header that identifies the source of the request.
 exports.sourceChannel = `X-HCP-Source-Channel`;
