@@ -44,11 +44,14 @@ jobs:
           FILTER_REGEX_EXCLUDE: dist/**/*
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_ALL_CODEBASE: true
-          VALIDATE_TYPESCRIPT_STANDARD: false
-          VALIDATE_JAVASCRIPT_STANDARD: false
           VALIDATE_JSCPD: false
           VALIDATE_TERRAGRUNT: false
           # Biome and Zizmor are new in v8 and not configured for this project
           VALIDATE_BIOME_FORMAT: false
           VALIDATE_BIOME_LINT: false
           VALIDATE_GITHUB_ACTIONS_ZIZMOR: false
+          # TypeScript/JS ESLint is run by ci.yml via npm run lint with the
+          # project's own config. Super-linter v8 uses ESLint v9 which cannot
+          # read the legacy .eslintrc.yml format, causing false positives.
+          VALIDATE_TYPESCRIPT_ES: false
+          VALIDATE_JAVASCRIPT_ES: false
