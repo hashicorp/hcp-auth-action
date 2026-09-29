@@ -2,9 +2,10 @@
  * Copyright (c) HashiCorp, Inc.
  */
 
-// Read the package.json file to get the version of the action.
-// eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
-export const { version: appVersion } = require('../package.json')
+import { version } from '../package.json'
+
+// appVersion is the version of the action read from package.json.
+export const appVersion = version
 
 // sourceChannel is the header that identifies the source of the request.
 export const sourceChannel = `X-HCP-Source-Channel`

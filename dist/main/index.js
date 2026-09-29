@@ -44670,9 +44670,9 @@ async function realRun() {
  */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.actionVersion = exports.sourceChannel = exports.appVersion = void 0;
-// Read the package.json file to get the version of the action.
-// eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
-exports.appVersion = __nccwpck_require__(4147).version;
+const package_json_1 = __nccwpck_require__(4147);
+// appVersion is the version of the action read from package.json.
+exports.appVersion = package_json_1.version;
 // sourceChannel is the header that identifies the source of the request.
 exports.sourceChannel = `X-HCP-Source-Channel`;
 // actionVersion contains the string version of the action.
@@ -44997,7 +44997,7 @@ module.exports = require("util");
 /***/ ((module) => {
 
 "use strict";
-module.exports = {"version":"0.1.0"};
+module.exports = JSON.parse('{"name":"hcp-auth-action","version":"0.1.0","description":"Authenticate to HashiCorp Cloud Platform from GitHub Actions via Workload Identity Federation or service principal keys.","license":"MPL-2.0","publisher":"hashicorp","author":"","repository":{"type":"git","url":"https://github.com/hashicorp/hcp-auth-action.git"},"keywords":["actions","hcp","auth"],"main":"dist/main/index.js","scripts":{"bundle":"npm run format:write && npm run package","ci-test":"npx jest","coverage":"npx make-coverage-badge --output-path ./badges/coverage.svg","format:write":"npx prettier --write .","format:check":"npx prettier --check .","lint":"npx eslint . -c ./.github/linters/.eslintrc.yml","package":"npx ncc build src/main.ts -o dist/main --source-map --license licenses.txt && npx ncc build src/post.ts -o dist/post --source-map --license licenses.txt","package:watch":"npm run package -- --watch","test":"npx jest","all":"npm run format:write && npm run lint && npm run test && npm run coverage && npm run package"},"jest":{"preset":"ts-jest","verbose":true,"clearMocks":true,"testEnvironment":"node","moduleFileExtensions":["js","ts"],"testMatch":["**/*.test.ts"],"testPathIgnorePatterns":["/node_modules/","/dist/"],"transform":{"^.+\\\\.ts$":"ts-jest"}},"dependencies":{"@actions/core":"^1.11.1","@actions/http-client":"^2.2.3","@actions/io":"^1.1.3"},"overrides":{"undici":">=6.28.0"},"devDependencies":{"@jest/globals":"^29.7.0","@types/jest":"^29.5.12","@types/node":"^20.14.2","@typescript-eslint/eslint-plugin":"^7.13.0","@typescript-eslint/parser":"^7.13.0","@vercel/ncc":"^0.38.1","eslint":"^8.57.0","eslint-plugin-github":"^5.0.1","eslint-plugin-jest":"^28.8.2","eslint-plugin-jsonc":"^2.16.0","eslint-plugin-prettier":"^5.2.1","jest":"^29.7.0","make-coverage-badge":"^1.2.0","prettier":"^3.3.3","prettier-eslint":"^17.1.2","ts-jest":"^29.2.5","typescript":"^5.5.4"}}');
 
 /***/ })
 
