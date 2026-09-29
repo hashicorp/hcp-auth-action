@@ -44,6 +44,10 @@ rules:
     'i18n-text/no-en': 'off',
     'import/no-namespace': 'off',
     'no-console': 'off',
+    # TypeScript handles module resolution; these rules cause false positives
+    # in environments without node_modules (e.g. super-linter Docker container).
+    'n/no-missing-import': 'off',
+    'n/no-missing-require': 'off',
     'no-unused-vars': 'off',
     'prettier/prettier': 'error',
     'semi': 'off',
