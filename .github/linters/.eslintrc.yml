@@ -44,6 +44,8 @@ rules:
     'i18n-text/no-en': 'off',
     'import/no-namespace': 'off',
     'no-console': 'off',
+    'n/no-missing-import': 'off',
+    'n/no-missing-require': 'off',
     'no-unused-vars': 'off',
     'prettier/prettier': 'error',
     'semi': 'off',
