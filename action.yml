@@ -1,4 +1,4 @@
-# Copyright (c) HashiCorp, Inc.
+# Copyright IBM Corp. 2024, 2026
 
 name: 'Authenticate to HashiCorp Cloud Platform'
 author: 'HashiCorp, Inc.'
