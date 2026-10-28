@@ -118,7 +118,7 @@ These instructions use the [hcp][hcp-cli] command-line tool.
    Actions running in a particular repository to authenticate.
 
    ```sh
-   # TODO: replace ${PROJECT_ID}, ${GITHUB_ORG}, and ${GITHB_REPO} with
+   # TODO: replace ${PROJECT_ID}, ${GITHUB_ORG}, and ${GITHUB_REPO} with
    # your values below.
    hcp iam workload-identity-providers create-oidc "github" \
      --project "${PROJECT_ID}" \
